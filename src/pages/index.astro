@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from '../components/ProjectCard.astro';
+import Layout from '../layouts/Layout.astro';
+import "../styles/global.css";
+
+const allProjects = await getCollection('projects');
+---
+
+<Layout title="Dashboard - PROEX em Números">
+  <main class="p-8 max-w-7xl mx-auto">
+  <header class="bg-green-700 border-b-6 border-green-900 text-white p-4 md:p-6 mb-8 rounded-lg flex flex-col md:flex-row items-center md:items-start justify-between shadow-lg">
+    
+    <div class="flex flex-col text-center md:text-left mb-5 md:mb-0">
+      <h1 class="text-3xl md:text-4xl font-extrabold uppercase tracking-tighter mb-1">
+        PROEX - Em Números
+      </h1>
+      <h2 class="text-sm md:text-lg font-bold uppercase tracking-widest mb-2">
+        Pró-Reitoria de Extensão
+      </h2>
+    </div>
+
+    <div class="bg-white p-2 rounded-xl shadow-md flex items-center justify-center shrink-0">
+      <img src="src/assets/IFBA.png" width="150" alt="IFBA" class="object-contain" />
+    </div>
+
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8" id="project-grid">
+    {allProjects.map((project) => (
+      <div class="project-item" data-type={project.data.type}>
+        <ProjectCard 
+          title={project.data.title}
+          image={project.data.image}
+          objectives={project.data.objectives}
+          link={project.data.link}
+          type={project.data.type}
+        />
+      </div>
+    ))}
+  </div>
+</main>
+</Layout>
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const projects = document.querySelectorAll('.project-item');
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.getAttribute('data-filter');
+
+      // Atualiza estilo dos botões (daisyUI)
+      buttons.forEach(btn => btn.classList.remove('btn-active'));
+      button.classList.add('btn-active');
+
+      // Lógica de esconder/mostrar
+      projects.forEach(project => {
+        const projectType = project.getAttribute('data-type');
+        if (filter === 'Todos' || projectType === filter) {
+          (project as HTMLElement).style.display = 'block';
+        } else {
+          (project as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
