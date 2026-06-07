@@ -28,13 +28,13 @@ const allProjects = await getCollection('projects');
 
   <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8" id="project-grid">
     {allProjects.map((project) => (
-      <div class="project-item" data-type={project.data.type}>
+      <div class="project-item">
         <ProjectCard 
           title={project.data.title}
+          description={project.data.description}
           image={project.data.image}
           objectives={project.data.objectives}
           link={project.data.link}
-          type={project.data.type}
         />
       </div>
     ))}
